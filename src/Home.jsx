@@ -1,11 +1,15 @@
 import { SignInButton } from "@clerk/clerk-react";
 import { Button } from "./components/ui/button";
+import Header from "./components/Header";
 
 function Home() {
   return (
     <div>
-      <SignInButton mode="modal" forceRedirectUrl="/">
-        <Button>Sign in</Button>
+      {/* Header */}
+      <Header></Header>
+
+      <SignInButton mode="modal" afterSignIn="/">
+        <Button>Sign In</Button>
       </SignInButton>
     </div>
   );
