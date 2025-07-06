@@ -5,18 +5,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
 import React from "react";
 
-function DropdownField(item) {
+function DropdownField({ item, handleInputChange }) {
   return (
     <div>
-      <Select>
+      <Select
+        required={item.required}
+        onValueChange={(value) => handleInputChange(item.name, value)}
+      >
         <SelectTrigger className="w-full">
-          <SelectValue placeholder={item.item.label} />
+          <SelectValue placeholder={item.label} />
         </SelectTrigger>
         <SelectContent>
-          {item?.item?.options?.map((option, index) => (
+          {item?.options?.map((option, index) => (
             <SelectItem key={index} value={option}>
               {option}
             </SelectItem>
