@@ -104,7 +104,8 @@ const Category = [
   {
     id: 1,
     name: "SUV",
-    icon: "https://cdn-icons-png.flaticon.com/128/13584/13584003.png",
+    // icon: "https://cdn-icons-png.flaticon.com/128/13584/13584003.png",
+    icon: "/image.png",
   },
   {
     id: 2,

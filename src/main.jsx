@@ -27,7 +27,7 @@ const router = createBrowserRouter([
   },
 ]);
 
-// Import your Publishable Key from env file
+
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 if (!PUBLISHABLE_KEY) {

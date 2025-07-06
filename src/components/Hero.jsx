@@ -7,7 +7,7 @@ function Hero() {
       <h2 className="text-lg"> Find Bike for rent near by you</h2>
       <h2 className="text-[60px] font-bold">Find Your Dream Bike </h2>
       <Search></Search>
-      <img src="/tesla.png" className="mt-10"></img>
+      <img src="/bike3.png" className="mt-0"></img>
     </div>
   );
 }

@@ -9,21 +9,18 @@ import Footer from "./components/Footer";
 function Home() {
   return (
     <div>
-      {/* Header */}
       <Header></Header>
-      {/* Hero */}
+
       <Hero></Hero>
-      {/* catergory */}
+
       <Category></Category>
-      {/* most car search */}
       <MostSearchedCar></MostSearchedCar>
 
-      {/* info */}
       <Info></Info>
 
-        <Footer></Footer>
+      <Footer></Footer>
 
-      <SignInButton mode="modal" afterSignIn="/">
+      <SignInButton mode="modal" forceRedirectUrl="/">
         <Button>Sign In</Button>
       </SignInButton>
     </div>
