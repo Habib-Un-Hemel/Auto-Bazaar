@@ -15,7 +15,7 @@ dist-ssr
 
 # ...existing entries...
 .env.local
-.env
+.env.local.example
 
 # Editor directories and files
 .vscode/*
