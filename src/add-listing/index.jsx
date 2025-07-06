@@ -12,10 +12,11 @@ import { db } from "./../../configs";
 import { CarListing } from "./../../configs/schema";
 import TextAreaField from "./components/TextAreaField";
 import IconField from "./components/IconField";
+import UploadImages from "./components/UploadImages";
 
 function AddListing() {
   const [formData, setFormData] = useState([]);
-  const [featureData, setFeatureData] = useState([]);
+  const [featuresData, setFeatureData] = useState([]);
 
   // used to save capture user input from form
 
@@ -33,7 +34,7 @@ function AddListing() {
       ...prevData,
       [name]: value,
     }));
-    console.log(featureData); // This will log stale state!
+    console.log(featuresData); // This will log stale state!
   };
 
   const onSubmit = async (e) => {
@@ -41,7 +42,9 @@ function AddListing() {
     console.log("Form submitted with data:", formData);
 
     try {
-      const result = await db.insert(CarListing).values(formData);
+      const result = await db
+        .insert(CarListing)
+        .values({ ...formData, features: featuresData });
       if (result) {
         console.log("Data inserted successfully:", result);
       }
@@ -115,7 +118,10 @@ function AddListing() {
             </div>
           </div>
 
-          {/* car details */}
+          {/* car images */}
+          <Separator className="my-6" />
+          <UploadImages />
+
           <div className="mt-10 flex justify-end">
             <Button onClick={(e) => onSubmit(e)} type="submit">
               Submit
