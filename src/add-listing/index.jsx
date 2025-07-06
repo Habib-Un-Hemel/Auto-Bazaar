@@ -8,34 +8,56 @@ import { Separator } from "@/components/ui/separator";
 import features from "./../Shared/features.json";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
+import { db } from "./../../configs";
+import { CarListing } from "./../../configs/schema";
+import TextAreaField from "./components/TextAreaField";
+import IconField from "./components/IconField";
 
 function AddListing() {
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState([]);
+  const [featureData, setFeatureData] = useState([]);
 
+  // used to save capture user input from form
 
+  const handleInputChange = (name, value) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+    console.log(formData); // This will log stale state!
+  };
 
-const handleInputChange = (name, value) => {
-  setFormData((prevData) => ({
-    ...prevData,
-    [name]: value,
-  }));
-  console.log(formData); // This will log stale state!
-};
+  // used to save selected Feature List
+  const handleFeatureChange = (name, value) => {
+    setFeatureData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+    console.log(featureData); // This will log stale state!
+  };
 
-  // const onsubmit = (e) => {
-  //   e.preventDefault();
-  //   console.log("Form submitted with data:", formData);
-  //   // Add further form submission logic here
-  // };
-
-  const handleSubmit = async (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
+    console.log("Form submitted with data:", formData);
+
     try {
-      // Your submission logic
-    } catch (error) {
-      console.error(error);
+      const result = await db.insert(CarListing).values(formData);
+      if (result) {
+        console.log("Data inserted successfully:", result);
+      }
+    } catch (e) {
+      console.error("Error inserting data:", e);
     }
   };
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     // Your submission logic
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
   return (
     <div>
       <Header />
@@ -48,6 +70,7 @@ const handleInputChange = (name, value) => {
               {carDetails.carDetails.map((item, index) => (
                 <div key={index}>
                   <label className="text-sm">
+                    <IconField icon={item?.icon} />
                     {item?.label}
                     {item.required && <span className="text-red-500">*</span>}
                   </label>
@@ -62,11 +85,9 @@ const handleInputChange = (name, value) => {
                       handleInputChange={handleInputChange}
                     />
                   ) : item.fieldType === "textarea" ? (
-                    <Textarea
-                      placeholder={item.placeholder}
-                      onChange={(e) =>
-                        handleInputChange(item.name, e.target.value)
-                      }
+                    <TextAreaField
+                      item={item}
+                      handleInputChange={handleInputChange}
                       className="w-full"
                     />
                   ) : null}
@@ -85,7 +106,7 @@ const handleInputChange = (name, value) => {
                 <div key={index} className="flex gap-2 items-center">
                   <Checkbox
                     onCheckedChange={(value) =>
-                      handleInputChange(item.name, value)
+                      handleFeatureChange(item.name, value)
                     }
                   />
                   <h2>{item.label}</h2>
@@ -96,13 +117,13 @@ const handleInputChange = (name, value) => {
 
           {/* car details */}
           <div className="mt-10 flex justify-end">
-            {/* <Button onClick={(e) => onsubmit(e)} type="submit">
-              Submit
-            </Button> */}
-
-            <Button type="button" onClick={handleSubmit}>
+            <Button onClick={(e) => onSubmit(e)} type="submit">
               Submit
             </Button>
+
+            {/* <Button type="button" onClick={handleSubmit}>
+              Submit
+            </Button> */}
           </div>
         </form>
       </div>

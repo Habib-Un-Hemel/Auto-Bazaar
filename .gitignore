@@ -11,6 +11,11 @@ node_modules
 dist
 dist-ssr
 *.local
+.drizzle.config.js
+
+# ...existing entries...
+.env.local
+.env
 
 # Editor directories and files
 .vscode/*
