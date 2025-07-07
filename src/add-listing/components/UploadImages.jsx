@@ -2,9 +2,10 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useEffect, useState } from "react";
 import { IoMdCloseCircle } from "react-icons/io";
 import { storage } from "./../../../configs/firebaseConfig";
-import { Button } from "@/components/ui/button";
+import { db } from "./../../../configs";
+import { CarImages } from "./../../../configs/schema";
 
-function UploadImages(triggerUploadImages) {
+function UploadImages({ triggerUploadImages, setLoader }) {
   const [selectedFileList, setSelectedFileList] = useState([]);
 
   useEffect(() => {
@@ -26,7 +27,9 @@ function UploadImages(triggerUploadImages) {
     setSelectedFileList(result);
   };
 
+  //uploadImageonServer()
   const handleUpload = async () => {
+    setLoader(true);
     await selectedFileList.forEach(async (file) => {
       const fileName = Date.now() + ".jpeg";
       const storageRef = ref(storage, "autoBazar/" + fileName);
@@ -37,14 +40,16 @@ function UploadImages(triggerUploadImages) {
         .then((snapShot) => {
           console.log("Uploaded a blob or file!", snapShot);
         })
-        .then((resp) => {
+        .then(() => {
           getDownloadURL(storageRef).then(async (downloadUrl) => {
             console.log("File available at", downloadUrl);
-            // Here you can save the downloadUrl to your database or state
-            // For example, you can call a function to save it
-            // await saveImageUrlToDatabase(downloadUrl);
+            await db.insert(CarImages).values({
+              imageUrl: downloadUrl,
+              carListingId: triggerUploadImages, // Assuming listingId is passed as a prop
+            });
           });
         });
+      setLoader(false);
     });
   };
 

@@ -23,13 +23,14 @@ export const CarListing = pgTable("carLisiting", {
   offerType: varchar("offerType"),
   vin: varchar("vin"),
   listingDescription: varchar("listingDescription").notNull(),
-  features:json("features")
-
-});
+  features:json("features"),
+  createdBy: varchar("createdBy").notNull().default("admin@example.com"),
+  postedOn: varchar("postedOn")
+}); 
 
 export const CarImages=pgTable("carImages", {
 
-  id: serial("id").primaryKey(),
-  imageUrl: varchar("imageUrl").notNull(),
+  id:serial("id").primaryKey(),
+  imageUrl:varchar("imageUrl").notNull(),
   carListingId:integer("carListingId").notNull().references(() => CarListing.id),
 })

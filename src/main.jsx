@@ -7,6 +7,7 @@ import { createBrowserRouter, RouterProvider } from "react-router";
 import { ClerkProvider } from "@clerk/clerk-react";
 import Profile from "./profile";
 import AddListing from "./add-listing";
+import { Toaster } from "@/components/ui/sonner";
 
 const router = createBrowserRouter([
   {
@@ -27,7 +28,6 @@ const router = createBrowserRouter([
   },
 ]);
 
-
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 if (!PUBLISHABLE_KEY) {
@@ -38,6 +38,7 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
       <RouterProvider router={router}></RouterProvider>
+      <Toaster />
     </ClerkProvider>
   </StrictMode>
 );

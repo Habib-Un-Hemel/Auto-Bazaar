@@ -12,11 +12,20 @@ import { CarListing } from "./../../configs/schema";
 import TextAreaField from "./components/TextAreaField";
 import IconField from "./components/IconField";
 import UploadImages from "./components/UploadImages";
+import { BiLoaderAlt } from "react-icons/bi";
+import { toast } from "./../components/ui/sonner";
+import { useNavigate } from "react-router";
+import { useUser } from "@clerk/clerk-react";
+import moment from "moments";
+// import { fa } from "@faker-js/faker/.";
 
 function AddListing() {
   const [formData, setFormData] = useState([]);
   const [featuresData, setFeatureData] = useState([]);
   const [triggerUploadImages, setTriggerUploadImages] = useState();
+  const [loader, setLoader] = useState(false);
+  const navigate = useNavigate();
+  const { user } = useUser();
 
   // used to save capture user input from form
 
@@ -38,17 +47,24 @@ function AddListing() {
   };
 
   const onSubmit = async (e) => {
+    setLoader(true);
     e.preventDefault();
     console.log("Form submitted with data:", formData);
-
+    toast("please wait....");
     try {
       const result = await db
         .insert(CarListing)
-        .values({ ...formData, features: featuresData }).returning({id:CarListing.id});
+        .values({
+          ...formData,
+          features: featuresData,
+          createdBy: user?.primaryEmailAddress?.emailAddress,
+          postedOn:moment().format("DD/MM/YYYY"),
+        })
+        .returning({ id: CarListing.id });
       if (result) {
         console.log("Data inserted successfully:", result);
         setTriggerUploadImages(result[0]?.id);
-        // window.location.reload(); // Refresh the page after submit
+        setLoader(false);
       }
     } catch (e) {
       console.error("Error inserting data:", e);
@@ -122,11 +138,21 @@ function AddListing() {
 
           {/* car images */}
           <Separator className="my-6" />
-          <UploadImages triggerUploadImages={triggerUploadImages} />
+          <UploadImages
+            triggerUploadImages={triggerUploadImages}
+            setLoader={(v) => {
+              setLoader(v);
+              navigate("/profile");
+            }}
+          />
 
           <div className="mt-10 flex justify-end">
-            <Button onClick={(e) => onSubmit(e)} type="submit">
-              Submit
+            <Button disabled={loader} onClick={(e) => onSubmit(e)}>
+              {!loader ? (
+                "submit"
+              ) : (
+                <BiLoaderAlt className="animate-spin text-lg"></BiLoaderAlt>
+              )}
             </Button>
 
             {/* <Button type="button" onClick={handleSubmit}>
