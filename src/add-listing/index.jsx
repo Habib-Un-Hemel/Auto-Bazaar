@@ -1,9 +1,8 @@
 import Header from "@/components/Header";
-import React, { useState } from "react";
+import { useState } from "react";
 import carDetails from "./../Shared/carDetails.json";
 import InputField from "./components/InputField";
 import DropdownField from "./components/DropdownField";
-import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import features from "./../Shared/features.json";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -17,6 +16,7 @@ import UploadImages from "./components/UploadImages";
 function AddListing() {
   const [formData, setFormData] = useState([]);
   const [featuresData, setFeatureData] = useState([]);
+  const [triggerUploadImages, setTriggerUploadImages] = useState();
 
   // used to save capture user input from form
 
@@ -44,9 +44,11 @@ function AddListing() {
     try {
       const result = await db
         .insert(CarListing)
-        .values({ ...formData, features: featuresData });
+        .values({ ...formData, features: featuresData }).returning({id:CarListing.id});
       if (result) {
         console.log("Data inserted successfully:", result);
+        setTriggerUploadImages(result[0]?.id);
+        // window.location.reload(); // Refresh the page after submit
       }
     } catch (e) {
       console.error("Error inserting data:", e);
@@ -66,7 +68,7 @@ function AddListing() {
       <Header />
       <div className="px-10 md:px-20 my-10">
         <h2 className="font-bold text-4xl">Add New Listing</h2>
-        <form className="p-10 border rounded-xl mt-10" onSubmit={onsubmit}>
+        <form className="p-10 border rounded-xl mt-10" onSubmit={onSubmit}>
           <div>
             <h2 className="font-medium text-xl mb-6">Car Details</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -120,7 +122,7 @@ function AddListing() {
 
           {/* car images */}
           <Separator className="my-6" />
-          <UploadImages />
+          <UploadImages triggerUploadImages={triggerUploadImages} />
 
           <div className="mt-10 flex justify-end">
             <Button onClick={(e) => onSubmit(e)} type="submit">
@@ -132,6 +134,7 @@ function AddListing() {
             </Button> */}
           </div>
         </form>
+        {/* <UploadImages /> */}
       </div>
     </div>
   );
