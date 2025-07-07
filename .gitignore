@@ -17,7 +17,9 @@ dist-ssr
 .env.local
 .env.local.example
 
-.drizzle.config.js
+# Drizzle
+drizzle.config.js
+.drizzle/
 
 # Editor directories and files
 .vscode/*
