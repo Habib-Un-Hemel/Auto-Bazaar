@@ -13,10 +13,10 @@ import TextAreaField from "./components/TextAreaField";
 import IconField from "./components/IconField";
 import UploadImages from "./components/UploadImages";
 import { BiLoaderAlt } from "react-icons/bi";
-import { toast } from "./../components/ui/sonner";
+import { toast } from "sonner";
 import { useNavigate } from "react-router";
 import { useUser } from "@clerk/clerk-react";
-import moment from "moments";
+import moment from "moment";
 // import { fa } from "@faker-js/faker/.";
 
 function AddListing() {
