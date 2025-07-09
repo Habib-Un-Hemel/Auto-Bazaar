@@ -4,46 +4,49 @@ import { BsFillFuelPumpDieselFill } from "react-icons/bs";
 import { MdSpeed } from "react-icons/md";
 import { TbManualGearboxFilled } from "react-icons/tb";
 import { IoMdOpen } from "react-icons/io";
+import PropTypes from "prop-types";
 
-function CarItem(car) {
+function CarItem({ car }) {
+  if (!car) return null;
+
   return (
     <div className="rounded-xl bg-white border hover:shadow-md cursor-pointer">
-      {/* debugging */}
-      {/* {console.log(car)}
-      {/* {console.log(car.car.image)} */}
-      {/* {console.log(car?.car.image)} */}
       <h2 className="absolute m-2 bg-green-500 px-2 rounded-full text-sm text-white">
         New
       </h2>
-      <img
-        src={car?.car.image}
-        width={"100%"}
-        height={250}
-        className="rounded-t-xl"
-      ></img>
+      {car.images?.[0]?.imageUrl && (
+        <img
+          src={car.images[0].imageUrl}
+          alt={car.listingTitle}
+          width="100%"
+          height={250}
+          className="rounded-t-xl h-[180px] object-cover " 
+        />
+      )}
       <div className="p-4">
-        <h2 className="font-bold text-black text-lg mb-2">{car?.car.name}</h2>
-        <Separator></Separator>
-        {/* <div className="grid gird-cols-3 mt-5"> */}
+        <h2 className="font-bold text-black text-lg mb-2">
+          {car.listingTitle}
+        </h2>
+        <Separator />
         <div className="flex justify-between mt-5">
           <div className="flex flex-col items-center">
             <BsFillFuelPumpDieselFill className="text-lg mb-2" />
-            <h2>{car.car.miles} Miles</h2>
+            <h2>{car.mileage} Miles</h2>
           </div>
 
           <div className="flex flex-col items-center">
             <MdSpeed className="text-lg mb-2" />
-            <h2>{car.car.fuelType}</h2>
+            <h2>{car.fuelType}</h2>
           </div>
 
           <div className="flex flex-col items-center">
             <TbManualGearboxFilled className="text-lg mb-2" />
-            <h2>{car.car.gearType}</h2>
+            <h2>{car.transmission}</h2>
           </div>
         </div>
-        <Separator className="mt-2"></Separator>
-        <div className="flex justify-between items-center ">
-          <h2 className="font-bold text-xl">${car.car.price}</h2>
+        <Separator className="mt-2" />
+        <div className="flex justify-between items-center">
+          <h2 className="font-bold text-xl">${car.sellingPrice}</h2>
           <h2 className="text-primary text-sm flex gap-2 items-center">
             View Details
             <IoMdOpen />
@@ -53,5 +56,20 @@ function CarItem(car) {
     </div>
   );
 }
+
+CarItem.propTypes = {
+  car: PropTypes.shape({
+    listingTitle: PropTypes.string,
+    mileage: PropTypes.string,
+    fuelType: PropTypes.string,
+    transmission: PropTypes.string,
+    sellingPrice: PropTypes.string,
+    images: PropTypes.arrayOf(
+      PropTypes.shape({
+        imageUrl: PropTypes.string,
+      })
+    ),
+  }).isRequired,
+};
 
 export default CarItem;
