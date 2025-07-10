@@ -80,9 +80,10 @@ function UploadImages({ triggerUploadImages, setLoader, carInfo, mode }) {
     console.log(carInfo?.images[index]);
     await db
       .delete(CarImages)
-      .where(eq(CarImages.id, carInfo?.images[index]?.id)).returning({id: CarImages.id});
+      .where(eq(CarImages.id, carInfo?.images[index]?.id))
+      .returning({ id: CarImages.id });
 
-    const imageList = EditCarImageList.filter(item => item != image);
+    const imageList = EditCarImageList.filter((item) => item != image);
     setEditCarImageList(imageList);
   };
 
