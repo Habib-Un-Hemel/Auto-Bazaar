@@ -35,13 +35,13 @@ export const FormatResult = (resp) => {
 
   const groupedListings = resp.reduce((acc, item) => {
     const listingId = item.carLisiting?.id;
-    
+
     if (!listingId) return acc;
 
     if (!acc[listingId]) {
       acc[listingId] = {
         ...item.carLisiting,
-        images: []
+        images: [],
       };
     }
 

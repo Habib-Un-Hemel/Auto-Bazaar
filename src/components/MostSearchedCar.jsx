@@ -31,7 +31,7 @@ function MostSearchedCar() {
         .limit(10);
 
       const formattedResults = FormatResult(result);
-      console.log("Most Searched Cars:", formattedResults);
+      // console.log("Most Searched Cars:", formattedResults);
       setCarList(formattedResults);
     } catch (error) {
       console.error("Error fetching cars:", error);
