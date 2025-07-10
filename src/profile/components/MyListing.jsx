@@ -61,8 +61,14 @@ function MyListing() {
           <div key={index}>
             <CarItem car={item} />
             <div className="p-2 flex bg-gray-50 justify-between items-center gap-3">
-              <Button variant="outline" className="w-full">Edit</Button>
-              <Button variant="destructive"><FaTrashAlt></FaTrashAlt></Button>
+              <Link  className="w-full " to={"/add-listing?mode=edit&id=" + item?.id}>
+                <Button variant="outline" className="w-full">
+                  Edit
+                </Button>
+              </Link>
+              <Button variant="destructive">
+                <FaTrashAlt></FaTrashAlt>
+              </Button>
             </div>
           </div>
         ))}

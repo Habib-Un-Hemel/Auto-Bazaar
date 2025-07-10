@@ -2,7 +2,7 @@ import { Input } from "@/components/ui/input";
 import React from "react";
 import PropTypes from "prop-types";
 
-function InputField({ item, handleInputChange }) {
+function InputField({ item, handleInputChange, carInfo }) {
   if (!item || !handleInputChange) {
     return null; // Return null if required props are missing
   }
@@ -14,6 +14,7 @@ function InputField({ item, handleInputChange }) {
         name={item.name}
         placeholder={item.placeholder || ""}
         required={item.required || false}
+        defaultValue={carInfo?.[item.name]}
         onChange={(e) => {
           if (e && e.target) {
             handleInputChange(item.name, e.target.value);

@@ -1,5 +1,5 @@
 import Header from "@/components/Header";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import carDetails from "./../Shared/carDetails.json";
 import InputField from "./components/InputField";
 import DropdownField from "./components/DropdownField";
@@ -8,24 +8,55 @@ import features from "./../Shared/features.json";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { db } from "./../../configs";
-import { CarListing } from "./../../configs/schema";
+import { CarImages, CarListing } from "./../../configs/schema";
 import TextAreaField from "./components/TextAreaField";
 import IconField from "./components/IconField";
 import UploadImages from "./components/UploadImages";
 import { BiLoaderAlt } from "react-icons/bi";
 import { toast } from "sonner";
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import { useUser } from "@clerk/clerk-react";
 import moment from "moment";
+import { eq } from "drizzle-orm";
+import { FormatResult } from "@/Shared/Service";
+
 // import { fa } from "@faker-js/faker/.";
 
 function AddListing() {
   const [formData, setFormData] = useState([]);
   const [featuresData, setFeatureData] = useState([]);
   const [triggerUploadImages, setTriggerUploadImages] = useState();
+
+  useEffect(() => {
+    console.log("triggerUploadImages changed:", triggerUploadImages);
+  }, [triggerUploadImages]);
+  const [searchParams] = useSearchParams();
+  const [carInfo, SetCarInfo] = useState([]);
   const [loader, setLoader] = useState(false);
   const navigate = useNavigate();
   const { user } = useUser();
+
+  const mode = searchParams.get("mode");
+  const recordId = searchParams.get("id");
+
+  useEffect(() => {
+    if (mode == "edit") {
+      GetListingDetail();
+    }
+  }, []);
+
+  const GetListingDetail = async () => {
+    const result = await db
+      .select()
+      .from(CarListing)
+      .innerJoin(CarImages, eq(CarListing.id, CarImages.carListingId))
+      .where(eq(CarListing.id, recordId));
+    const resp = FormatResult(result);
+    console.log("Listing Details:", resp);
+    SetCarInfo(resp[0]);
+    setFormData(resp[0]);
+    setFeatureData(resp[0]?.features);
+  };
 
   // used to save capture user input from form
 
@@ -51,23 +82,45 @@ function AddListing() {
     e.preventDefault();
     console.log("Form submitted with data:", formData);
     toast("please wait....");
-    try {
+
+    if (mode == "edit") {
       const result = await db
-        .insert(CarListing)
-        .values({
+        .update(CarListing)
+        .set({
           ...formData,
           features: featuresData,
           createdBy: user?.primaryEmailAddress?.emailAddress,
-          postedOn:moment().format("DD/MM/YYYY"),
+          userName: user?.fullName,
+          userImageUrl: user?.imageUrl,
+          postedOn: moment().format("DD/MM/YYYY"),
         })
+        .where(eq(CarListing.id, recordId))
         .returning({ id: CarListing.id });
-      if (result) {
-        console.log("Data inserted successfully:", result);
-        setTriggerUploadImages(result[0]?.id);
-        setLoader(false);
+      console.log("Data updated successfully:", result);
+      navigate("/profile");
+      setLoader(false);
+    } else {
+      try {
+        const result = await db
+          .insert(CarListing)
+          .values({
+            ...formData,
+            features: featuresData,
+            createdBy: user?.primaryEmailAddress?.emailAddress,
+            userName: user?.fullName,
+            userImageUrl: user?.imageUrl,
+            postedOn: moment().format("DD/MM/YYYY"),
+          })
+          .returning({ id: CarListing.id });
+        if (result) {
+          console.log("Data inserted successfully:", result);
+          setTriggerUploadImages(result[0]?.id);
+          console.log("triggerUploadImages set to:", result[0]?.id);
+          setLoader(false);
+        }
+      } catch (e) {
+        console.error("Error inserting data:", e);
       }
-    } catch (e) {
-      console.error("Error inserting data:", e);
     }
   };
 
@@ -99,16 +152,19 @@ function AddListing() {
                     <InputField
                       item={item}
                       handleInputChange={handleInputChange}
+                      carInfo={carInfo}
                     />
                   ) : item.fieldType === "dropdown" ? (
                     <DropdownField
                       item={item}
                       handleInputChange={handleInputChange}
+                      carInfo={carInfo}
                     />
                   ) : item.fieldType === "textarea" ? (
                     <TextAreaField
                       item={item}
                       handleInputChange={handleInputChange}
+                      carInfo={carInfo}
                       className="w-full"
                     />
                   ) : null}
@@ -129,6 +185,7 @@ function AddListing() {
                     onCheckedChange={(value) =>
                       handleFeatureChange(item.name, value)
                     }
+                    checked={featuresData?.[item.name]}
                   />
                   <h2>{item.label}</h2>
                 </div>
@@ -140,6 +197,8 @@ function AddListing() {
           <Separator className="my-6" />
           <UploadImages
             triggerUploadImages={triggerUploadImages}
+            carInfo={carInfo}
+            mode = {mode}
             setLoader={(v) => {
               setLoader(v);
               navigate("/profile");
