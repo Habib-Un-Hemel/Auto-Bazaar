@@ -11,6 +11,8 @@ import Description from "../components/Description";
 import Features from "../components/Features";
 import Pricing from "../components/Pricing";
 import Specification from "../components/Specification";
+import OwnersDetail from "../components/OwnersDetail";
+
 function ListingDetail() {
   const { id } = useParams();
   const [carDetail, setCarDetail] = useState();
@@ -58,6 +60,7 @@ function ListingDetail() {
             <Specification carDetail={carDetail}></Specification>
 
             {/* owmder details */}
+            <OwnersDetail carDetail={carDetail}></OwnersDetail>
           </div>
         </div>
       </div>
