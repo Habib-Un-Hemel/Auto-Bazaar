@@ -12,7 +12,9 @@ import Features from "../components/Features";
 import Pricing from "../components/Pricing";
 import Specification from "../components/Specification";
 import OwnersDetail from "../components/OwnersDetail";
-
+import Footer from "@/components/Footer";
+import Calculator from "../components/Calculator";
+import MostSearchedCar from "@/components/MostSearchedCar";
 function ListingDetail() {
   const { id } = useParams();
   const [carDetail, setCarDetail] = useState();
@@ -49,6 +51,9 @@ function ListingDetail() {
             <Description carDetail={carDetail}> </Description>
             {/* feature list */}
             <Features features={carDetail?.features}></Features>
+
+            {/* calut */}
+            <Calculator carDetail={carDetail}></Calculator>
           </div>
 
           {/* right */}
@@ -63,7 +68,9 @@ function ListingDetail() {
             <OwnersDetail carDetail={carDetail}></OwnersDetail>
           </div>
         </div>
+        <MostSearchedCar></MostSearchedCar>
       </div>
+      <Footer></Footer>
     </div>
   );
 }
