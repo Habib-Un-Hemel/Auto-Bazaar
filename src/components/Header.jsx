@@ -1,15 +1,15 @@
 import { SignInButton, UserButton, useUser } from "@clerk/clerk-react";
-import React, { useState } from "react";
-import { Link } from "react-router";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
-import { Menu } from "lucide-react";
+import { Menu, LogIn } from "lucide-react";
 
 function Header() {
   const { isSignedIn } = useUser();
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="shadow-sm px-4 py-3 relative md:ml-10 md:mr-10  ">
+    <div className="shadow-sm px-4 py-3 relative md:ml-10 md:mr-10">
       <div className="flex justify-between items-center max-h-20">
         {/* Logo + Tagline */}
         <div className="flex items-center gap-2">
@@ -49,7 +49,18 @@ function Header() {
               </Link>
             </>
           ) : (
-            <Button>Submit Listing</Button>
+            <>
+              {/* Primary-colored SignIn Button */}
+              <SignInButton mode="modal">
+                <Button className="flex items-center gap-2">
+                  <LogIn size={16} />
+                  Sign In
+                </Button>
+              </SignInButton>
+              <Link to="/add-listing">
+                <Button variant="outline">Submit Listing</Button>
+              </Link>
+            </>
           )}
         </div>
 
@@ -73,7 +84,20 @@ function Header() {
               </Link>
             </div>
           ) : (
-            <Button className="w-full">Submit Listing</Button>
+            <>
+              {/* Mobile Styled SignIn Button */}
+              <SignInButton mode="modal">
+                <Button className="w-full flex items-center justify-center gap-2">
+                  <LogIn size={16} />
+                  Sign In
+                </Button>
+              </SignInButton>
+              <Link to="/add-listing">
+                <Button variant="outline" className="w-full">
+                  Submit Listing
+                </Button>
+              </Link>
+            </>
           )}
 
           {/* Mobile Menu Items */}

@@ -16,10 +16,10 @@ function Home() {
       <Info></Info>
 
       <Footer></Footer>
-
+{/* 
       <SignInButton mode="modal" forceRedirectUrl="/">
         <Button>Sign In</Button>
-      </SignInButton>
+      </SignInButton> */}
     </div>
   );
 }
