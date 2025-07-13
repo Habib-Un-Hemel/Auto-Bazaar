@@ -1,13 +1,11 @@
-import React from "react";
 import Logo from "../assets/logo.svg";
-
 
 function Footer() {
   return (
     <footer className="bg-white">
       <div className="mx-auto max-w-screen-xl px-4 pt-16 pb-6 sm:px-6 lg:px-8">
         <div className="lg:flex lg:items-center lg:justify-between">
-          <div className="flex justify-center text-teal-600 sm:justify-start">
+          <div className="flex justify-center text-primary sm:justify-start">
             <a href="/" className="-m-1.5 p-1.5">
               <img src={Logo} alt="AutoBazaar Logo" className="h-10 w-auto" />
             </a>
@@ -200,8 +198,8 @@ function Footer() {
                   </span>
 
                   <span className="relative flex size-2">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-teal-400 opacity-75"></span>
-                    <span className="relative inline-flex size-2 rounded-full bg-teal-500"></span>
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>
+                    <span className="relative inline-flex size-2 rounded-full bg-primary"></span>
                   </span>
                 </a>
               </li>
@@ -230,7 +228,7 @@ function Footer() {
                   />
 
                   <button
-                    className="block rounded-full bg-indigo-500 px-8 py-3 font-medium text-white transition hover:bg-indigo-600"
+                    className="block rounded-full bg-primary px-8 py-3 font-medium text-white transition hover:bg-primary/90"
                     type="submit"
                   >
                     Subscribe
@@ -252,7 +250,7 @@ function Footer() {
                 href="#"
                 rel="noreferrer"
                 target="_blank"
-                className="text-teal-700 transition hover:text-teal-700/75"
+                className="text-primary transition hover:text-primary/75"
               >
                 <span className="sr-only">Facebook</span>
                 <svg
@@ -275,7 +273,7 @@ function Footer() {
                 href="#"
                 rel="noreferrer"
                 target="_blank"
-                className="text-teal-700 transition hover:text-teal-700/75"
+                className="text-primary transition hover:text-primary/75"
               >
                 <span className="sr-only">Instagram</span>
                 <svg
@@ -298,7 +296,7 @@ function Footer() {
                 href="#"
                 rel="noreferrer"
                 target="_blank"
-                className="text-teal-700 transition hover:text-teal-700/75"
+                className="text-primary transition hover:text-primary/75"
               >
                 <span className="sr-only">Twitter</span>
                 <svg
@@ -317,7 +315,7 @@ function Footer() {
                 href="#"
                 rel="noreferrer"
                 target="_blank"
-                className="text-teal-700 transition hover:text-teal-700/75"
+                className="text-primary transition hover:text-primary/75"
               >
                 <span className="sr-only">GitHub</span>
                 <svg
@@ -340,7 +338,7 @@ function Footer() {
                 href="#"
                 rel="noreferrer"
                 target="_blank"
-                className="text-teal-700 transition hover:text-teal-700/75"
+                className="text-primary transition hover:text-primary/75"
               >
                 <span className="sr-only">Dribbble</span>
                 <svg
