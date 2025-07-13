@@ -10,12 +10,9 @@ function Home() {
   return (
     <div>
       <Header></Header>
-
       <Hero></Hero>
-
       <Category></Category>
       <MostSearchedCar></MostSearchedCar>
-
       <Info></Info>
 
       <Footer></Footer>
