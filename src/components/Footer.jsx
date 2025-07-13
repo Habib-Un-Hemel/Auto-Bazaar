@@ -12,7 +12,7 @@ function Footer() {
           </div>
 
           <p className="mt-4 max-w-md text-center leading-relaxed text-gray-500 sm:text-left lg:mt-0">
-            RailSpeed is a smart bike rental platform offering fast, reliable,
+            Auto Bazar is a smart bike rental platform offering fast, reliable,
             and affordable rides for daily commutes or weekend trips. With
             flexible pricing, real-time availability, and eco-friendly options,
             exploring the city has never been easier.
@@ -211,8 +211,8 @@ function Footer() {
 
             <div className="mx-auto mt-8 max-w-md sm:ms-0">
               <p className="text-center leading-relaxed text-gray-500 ltr:sm:text-left rtl:sm:text-right">
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Earum
-                id, iure consectetur et error hic!
+                Have questions or ready to book? Contact us directly or click
+                here to get started instantly!
               </p>
 
               <form className="mt-4">

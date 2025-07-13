@@ -45,7 +45,7 @@ function MostSearchedCar() {
   }
 
   return (
-    <div className="mx-24">
+    <div className="mx-24 mt-60">
       <h2 className="font-bold text-3xl text-center mt-16 mb-7">
         Most Searched Cars
       </h2>

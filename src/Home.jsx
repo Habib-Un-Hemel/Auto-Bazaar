@@ -11,7 +11,7 @@ function Home() {
     <div>
       <Header></Header>
       <Hero></Hero>
-      <Category></Category>
+      {/* <Category></Category> */}
       <MostSearchedCar></MostSearchedCar>
       <Info></Info>
 
