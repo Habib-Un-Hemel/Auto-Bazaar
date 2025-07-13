@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router";
 import MyListing from "./components/MyListing";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Inbox from "./components/inbox";
 
 function Profile() {
   return (
@@ -19,7 +20,7 @@ function Profile() {
           <TabsContent value="my-listing" >
             <MyListing></MyListing>
           </TabsContent>
-          <TabsContent value="inbox">Inbox Tab</TabsContent>
+          <TabsContent value="inbox"><Inbox></Inbox></TabsContent>
           <TabsContent value="profile">Profile Tab</TabsContent>
         </Tabs>
       </div>
