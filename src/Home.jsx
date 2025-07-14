@@ -6,12 +6,16 @@ import Category from "./components/Category";
 import MostSearchedBike from "./components/MostSearchedBike";
 import Info from "./components/Info";
 import Footer from "./components/Footer";
+// import BrowseByBrand from "./components/BrowseByBrand";
+import BrandShowcase from "./components/BrandShowcase";
 function Home() {
   return (
     <div>
       <Header></Header>
       <Hero></Hero>
       <Category></Category>
+      {/* <BrowseByBrand></BrowseByBrand> */}
+      <BrandShowcase></BrandShowcase>
       <MostSearchedBike></MostSearchedBike>
       <Info></Info>
 

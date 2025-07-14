@@ -13,12 +13,12 @@ function Category() {
   }
 
   return (
-    <div className="mx-8 md:mx-24">
-      <h2 className="font-bold text-3xl text-center mt-16 mb-7">
+    <div className="mx-8 md:mx-24 mb-25 pt-9 ">
+      <h2 className="font-bold text-3xl text-center mt-20 mb-7">
         Browse By Category
       </h2>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-4 mb-10">
         {BikeCategories.map((item, index) => (
           <Link to={`/search/${item.category}`} key={index}>
             <div className="p-2 cursor-pointer hover:scale-105 transition-all">
