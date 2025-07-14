@@ -1,26 +1,41 @@
-import Data from "@/Shared/Data";
-import React from "react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
+import { BikeCategories } from "@/Shared/Data"; // Make sure to rename this import
 
-export const Category = () => {
+function Category() {
+  // Add a check to ensure BikeCategories exists
+  if (!BikeCategories || !Array.isArray(BikeCategories)) {
+    console.error("BikeCategories is undefined or not an array");
+    return (
+      <div className="text-center my-8">
+        <p>Categories unavailable at the moment</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="mt-40">
-      <h2 className="font-bold text-3xl text-center mb-6">Browse By Type</h2>
-      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-9 gap-6 px-20">
-        {Data.Category.map((category, index) => (
-          // eslint-disable-next-line react/jsx-key
-          <Link to={"search/" + category.name}>
-            <div
-              key={index}
-              className="border rounded-xl p-3 items-center flex flex-col  hover:shadow-md cursor-pointer"
-            >
-              <img src={category.icon} width={35} height={35}></img>
-              <h2 className="mt-2">{category.name}</h2>
+    <div className="mx-8 md:mx-24">
+      <h2 className="font-bold text-3xl text-center mt-16 mb-7">
+        Browse By Category
+      </h2>
+
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-4">
+        {BikeCategories.map((item, index) => (
+          <Link to={`/search/${item.category}`} key={index}>
+            <div className="p-2 cursor-pointer hover:scale-105 transition-all">
+              <img
+                src={item.image}
+                width={200}
+                height={100}
+                className="rounded-xl"
+                alt={item.category}
+              />
+              <h2 className="font-medium text-center mt-2">{item.category}</h2>
             </div>
           </Link>
         ))}
       </div>
     </div>
   );
-};
+}
+
 export default Category;

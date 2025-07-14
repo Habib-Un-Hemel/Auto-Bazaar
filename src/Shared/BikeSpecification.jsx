@@ -2,7 +2,7 @@ export default [
   {
     label: "Category",
     name: "category",
-    icon: "FaCar",
+    icon: "FaMotorcycle",
   },
   {
     label: "Condition",
@@ -17,7 +17,7 @@ export default [
   {
     label: "Model",
     name: "model",
-    icon: "FaCarSide",
+    icon: "FaMotorcycle",
   },
   {
     label: "Year",
@@ -25,9 +25,9 @@ export default [
     icon: "FaCalendarAlt",
   },
   {
-    label: "Drive Type",
-    name: "driveType",
-    icon: "FaRoad",
+    label: "Engine Capacity",
+    name: "engineCapacity",
+    icon: "FaWrench",
   },
   {
     label: "Transmission",
@@ -45,11 +45,6 @@ export default [
     icon: "FaTachometerAlt",
   },
   {
-    label: "Engine Size",
-    name: "engineSize",
-    icon: "FaWrench",
-  },
-  {
     label: "Cylinder",
     name: "cylinder",
     icon: "FaCircle",
@@ -60,8 +55,18 @@ export default [
     icon: "FaPalette",
   },
   {
-    label: "Door",
-    name: "door",
-    icon: "FaDoorClosed",
+    label: "Brake Type",
+    name: "brakeType",
+    icon: "FaBrake",
+  },
+  {
+    label: "Wheel Type",
+    name: "wheelType",
+    icon: "FaDotCircle",
+  },
+  {
+    label: "Chassis Type",
+    name: "chassisType",
+    icon: "FaLayerGroup",
   },
 ];

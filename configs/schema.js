@@ -1,6 +1,6 @@
 import { integer, json, pgTable, serial, varchar } from "drizzle-orm/pg-core";
 
-export const CarListing = pgTable("carLisiting", {
+export const BikeListing = pgTable("bikeListing", {
   id: serial("id").primaryKey(),
   listingTitle: varchar("listingTitle"),
   tagline: varchar("tagline"),
@@ -8,19 +8,18 @@ export const CarListing = pgTable("carLisiting", {
   sellingPrice: varchar("sellingPrice").notNull(),
   category: varchar("category").notNull(),
   condition: varchar("condition").notNull(),
-  // type: varchar("type").notNull(),
   make: varchar("make").notNull(),
   model: varchar("model").notNull(),
   year: varchar("year").notNull(),
-  driveType: varchar("driveType"),
+  engineCapacity: varchar("engineCapacity"),
   transmission: varchar("transmission"),
   fuelType: varchar("fuelType").notNull(),
   mileage: varchar("mileage").notNull(),
-  engineSize: varchar("engineSize"),
   cylinder: varchar("cylinder"),
   color: varchar("color").notNull(),
-  door: varchar("door"),
-  offerType: varchar("offerType"),
+  brakeType: varchar("brakeType"),
+  wheelType: varchar("wheelType"),
+  chassisType: varchar("chassisType"),
   vin: varchar("vin"),
   listingDescription: varchar("listingDescription").notNull(),
   features: json("features"),
@@ -32,10 +31,10 @@ export const CarListing = pgTable("carLisiting", {
   postedOn: varchar("postedOn"),
 });
 
-export const CarImages = pgTable("carImages", {
+export const BikeImages = pgTable("bikeImages", {
   id: serial("id").primaryKey(),
   imageUrl: varchar("imageUrl").notNull(),
-  carListingId: integer("carListingId")
+  bikeListingId: integer("bikeListingId")
     .notNull()
-    .references(() => CarListing.id),
+    .references(() => BikeListing.id),
 });

@@ -44,96 +44,58 @@ export const CreateSendBirdChannel = (users, title) => {
   );
 };
 
-// import axios from "axios";
 
-// // Get the SendBird app ID from environment variables
-// const SENDBIRD_APP_ID = import.meta.env.VITE_SENDBIRD_APP_ID;
-// const SENDBIRD_API_TOKEN = import.meta.env.VITE_SENDBIRD_API_TOKEN;
-
-// // Create or update a SendBird user
-// export const CreateSendBirdUser = async (userIId, name, profileUrl) => {
-//   if (!SENDBIRD_APP_ID) {
-//     console.error("SendBird App ID is not defined in environment variables");
-//     throw new Error("SendBird App ID is missing");
-//   }
-
-//   try {
-//     const response = await axios.put(
-//       "https://api-" + SENDBIRD_APP_ID + ".sendbird.com/v3/users",
-//       {
-//         user_id: userIId,
-//         nickname: name,
-//         profile_url: profileUrl,
-//         issue_access_token: false,
-//       },
-//       {
-//         headers: {
-//           "Api-Token": SENDBIRD_API_TOKEN,
-//           "Content-Type": "application/json",
-//         },
-//       }
-//     );
-
-//     return response.data;
-//   } catch (error) {
-//     console.error("Error in CreateSendBirdUser:", error);
-//     throw error;
-//   }
-// };
-
-// const FormatResult = (resp) => {
-//   let result = {};
-//   let finalResult = [];
-
-//   resp.forEach((item) => {
-//     const listingId = item.carLisiting?.id;
-
-//     if (!result[listingId]) {
-//       result[listingId] = {
-//         car: item.carLisiting,
-//         images: [],
-//       };
-//     }
-
-//     if (item.CarImages) {
-//       result[listingId].images.push(item.CarImages);
-//     }
-//   });
-
-//   // Convert result object to array
-//   result.forEach((item) => {
-//     finalResult.push({
-//       ...item.car,
-//       images: item.images,
-//     });
-//   });
-//   return finalResult;
-// };
-
-// export default { FormatResult };
 export const FormatResult = (resp) => {
+  console.log("Raw result:", resp);
+  console.log("Raw result length:", resp?.length || 0);
+
+  // Debug the structure of the first item if it exists
+  if (resp && resp.length > 0) {
+    console.log("First item keys:", Object.keys(resp[0]));
+    console.log("First item structure:", JSON.stringify(resp[0], null, 2));
+  }
+
   if (!resp || resp.length === 0) return [];
 
   const groupedListings = resp.reduce((acc, item) => {
-    const listingId = item.carLisiting?.id;
+    // Add more debugging
+    console.log("Processing item:", item);
 
-    if (!listingId) return acc;
+    // Check property names - this is likely the issue
+    const bikeListingProperty =
+      item.BikeListing || item.bikeListing || item.bikelisting;
+    const bikeImagesProperty =
+      item.BikeImages || item.bikeImages || item.bikeimages;
+
+    console.log("Found BikeListing?", !!bikeListingProperty);
+    console.log("Found BikeImages?", !!bikeImagesProperty);
+
+    // Try to find the ID regardless of property casing
+    const listingId = bikeListingProperty?.id;
+
+    if (!listingId) {
+      console.log("No listing ID found for item:", item);
+      return acc;
+    }
 
     if (!acc[listingId]) {
       acc[listingId] = {
-        ...item.carLisiting,
+        ...bikeListingProperty,
         images: [],
       };
     }
 
-    if (item.carImages) {
-      acc[listingId].images.push(item.carImages);
+    if (bikeImagesProperty) {
+      acc[listingId].images.push(bikeImagesProperty);
     }
 
     return acc;
   }, {});
 
-  return Object.values(groupedListings);
+  const formattedResult = Object.values(groupedListings);
+  console.log("Formatted result:", formattedResult);
+
+  return formattedResult;
 };
 
 export default {

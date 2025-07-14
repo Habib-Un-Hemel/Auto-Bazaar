@@ -23,7 +23,7 @@ function Header() {
               AutoBazar
             </p>
             <p className="text-xs hidden sm:block text-gray-500">
-              Fast, Smart Car Marketplace
+              Fast, Smart Bike Marketplace
             </p>
           </div>
         </Link>

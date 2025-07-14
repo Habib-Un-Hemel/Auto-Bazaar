@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import DetailHeader from "../components/DetailHeader";
 import { useParams } from "react-router";
 import { db } from "./../../../configs";
-import { CarImages, CarListing } from "./../../../configs/schema";
+import { BikeImages, BikeListing } from "./../../../configs/schema"; // Changed to bike schema
 import { eq } from "drizzle-orm";
 import { FormatResult } from "@/Shared/Service";
 import ImageGallery from "../components/ImageGallery";
@@ -14,24 +14,26 @@ import Specification from "../components/Specification";
 import OwnersDetail from "../components/OwnersDetail";
 import Footer from "@/components/Footer";
 import Calculator from "../components/Calculator";
-import MostSearchedCar from "@/components/MostSearchedCar";
+import MostSearchedBike from "@/components/MostSearchedBike"; // Changed to MostSearchedBike
+
 function ListingDetail() {
   const { id } = useParams();
-  const [carDetail, setCarDetail] = useState();
+  const [bikeDetail, setBikeDetail] = useState(); // Changed carDetail to bikeDetail
 
   useEffect(() => {
-    GetCarDetail();
+    GetBikeDetail(); // Changed function name
   }, []);
 
-  const GetCarDetail = async () => {
+  const GetBikeDetail = async () => {
+    // Changed function name
     const result = await db
       .select()
-      .from(CarListing)
-      .innerJoin(CarImages, eq(CarListing.id, CarImages.carListingId))
-      .where(eq(CarListing.id, id));
+      .from(BikeListing) // Changed to BikeListing
+      .innerJoin(BikeImages, eq(BikeListing.id, BikeImages.bikeListingId)) // Changed to bike schema
+      .where(eq(BikeListing.id, id)); // Changed to BikeListing
 
     const resp = FormatResult(result);
-    setCarDetail(resp[0]);
+    setBikeDetail(resp[0]); // Changed to setBikeDetail
   };
 
   return (
@@ -40,35 +42,36 @@ function ListingDetail() {
 
       {/* header Detail Component */}
       <div className="p-10 md:px-20">
-        <DetailHeader carDetail={carDetail} />
-
+        <DetailHeader bikeDetail={bikeDetail} /> {/* Changed prop name */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mt-10">
           {/* left */}
           <div className="md:col-span-2">
-            {/* immage galler */}
-            <ImageGallery carDetail={carDetail} />
-            {/* discritpiom */}
-            <Description carDetail={carDetail}> </Description>
+            {/* image gallery */}
+            <ImageGallery bikeDetail={bikeDetail} /> {/* Changed prop name */}
+            {/* description */}
+            <Description bikeDetail={bikeDetail}> </Description>{" "}
+            {/* Changed prop name */}
             {/* feature list */}
-            <Features features={carDetail?.features}></Features>
-
-            {/* calut */}
-            <Calculator carDetail={carDetail}></Calculator>
+            <Features features={bikeDetail?.features}></Features>
+            {/* calculator */}
+            <Calculator bikeDetail={bikeDetail}></Calculator>{" "}
+            {/* Changed prop name */}
           </div>
 
           {/* right */}
           <div>
-            {/* priceig */}
-            <Pricing carDetail={carDetail}></Pricing>
-
-            {/* car speficiation */}
-            <Specification carDetail={carDetail}></Specification>
-
-            {/* owmder details */}
-            <OwnersDetail carDetail={carDetail}></OwnersDetail>
+            {/* pricing */}
+            <Pricing bikeDetail={bikeDetail}></Pricing>{" "}
+            {/* Changed prop name */}
+            {/* bike specification */}
+            <Specification bikeDetail={bikeDetail}></Specification>{" "}
+            {/* Changed prop name */}
+            {/* owner details */}
+            <OwnersDetail bikeDetail={bikeDetail}></OwnersDetail>{" "}
+            {/* Changed prop name */}
           </div>
         </div>
-        <MostSearchedCar></MostSearchedCar>
+        <MostSearchedBike></MostSearchedBike> {/* Changed component name */}
       </div>
       <Footer></Footer>
     </div>

@@ -1,5 +1,5 @@
 {
-  "carDetails": [
+  "bikeDetails": [
     {
       "label": "Listing Title",
       "name": "listingTitle",
@@ -34,10 +34,18 @@
       "label": "Category",
       "name": "category",
       "fieldType": "dropdown",
-      "options": ["Sedan", "SUV", "Truck", "Coupe", "Convertible", "Van", "Hatchback","Electric","Hybrid"],
+      "options": [
+        "Standard",
+        "Cruiser",
+        "Sport",
+        "Touring",
+        "Off-road",
+        "Scooter",
+        "Electric"
+      ],
       "required": true,
       "column": 1,
-      "icon": "FaCar"
+      "icon": "FaMotorcycle"
     },
     {
       "label": "Condition",
@@ -49,62 +57,28 @@
       "icon": "FaCheckCircle"
     },
     {
-      "label": "Type",
-      "name": "type",
-      "fieldType": "dropdown",
-      "required": true,
-      "options": ["New", "Used", "Certified Pre-Owned"],
-      "column": 1,
-      "icon": "FaTags"
-    },
-    {
       "label": "Make",
       "name": "make",
       "fieldType": "dropdown",
       "required": true,
       "options": [
-        "Toyota",
+        "Yamaha",
         "Honda",
-        "Ford",
-        "Chevrolet",
-        "Nissan",
+        "Suzuki",
+        "Kawasaki",
+        "KTM",
+        "TVS",
+        "Bajaj",
+        "Hero",
+        "Royal Enfield",
+        "Harley-Davidson",
+        "Ducati",
         "BMW",
-        "Mercedes-Benz",
-        "Audi",
-        "Tesla",
-        "Volkswagen",
-        "Hyundai",
-        "Kia",
-        "Lexus",
-        "Subaru",
-        "Mazda",
-        "Jeep",
-        "Dodge",
-        "Ram",
-        "GMC",
-        "Volvo",
-        "Land Rover",
-        "Jaguar",
-        "Porsche",
-        "Fiat",
-        "Alfa Romeo",
-        "Mitsubishi",
-        "Infiniti",
-        "Acura",
-        "Mini",
-        "Buick",
-        "Cadillac",
-        "Chrysler",
-        "Lincoln",
-        "Maserati",
-        "Bentley",
-        "Rolls-Royce",
-        "Aston Martin",
-        "Ferrari",
-        "Lamborghini",
-        "McLaren",
-        "Pagani",
-        "Bugatti"
+        "Aprilia",
+        "Triumph",
+        "Mahindra",
+        "Benelli",
+        "CFMoto"
       ],
       "column": 1,
       "icon": "FaIndustry"
@@ -115,7 +89,7 @@
       "fieldType": "text",
       "required": true,
       "column": 1,
-      "icon": "FaCarSide"
+      "icon": "FaMotorcycle"
     },
     {
       "label": "Year",
@@ -126,19 +100,26 @@
       "icon": "FaCalendarAlt"
     },
     {
-      "label": "Drive Type",
-      "name": "driveType",
-      "fieldType": "dropdown",
-      "options": ["FWD", "RWD", "AWD", "4WD"],
+      "label": "Engine Capacity (cc)",
+      "name": "engineCapacity",
+      "fieldType": "number",
       "required": true,
       "column": 1,
-      "icon": "FaRoad"
+      "icon": "FaWrench"
+    },
+    {
+      "label": "Mileage (km/l)",
+      "name": "mileage",
+      "fieldType": "number",
+      "required": true,
+      "column": 1,
+      "icon": "FaTachometerAlt"
     },
     {
       "label": "Transmission",
       "name": "transmission",
       "fieldType": "dropdown",
-      "options": ["Automatic", "Manual", "CVT"],
+      "options": ["Manual", "Automatic", "Semi-Automatic"],
       "required": true,
       "column": 1,
       "icon": "FaCogs"
@@ -147,25 +128,28 @@
       "label": "Fuel Type",
       "name": "fuelType",
       "fieldType": "dropdown",
-      "options": ["Petrol", "Diesel", "Electric", "Hybrid"],
+      "options": ["Petrol", "Electric"],
       "required": true,
       "column": 1,
       "icon": "FaGasPump"
     },
     {
-      "label": "Mileage",
-      "name": "mileage",
-      "fieldType": "number",
+      "label": "Color",
+      "name": "color",
+      "fieldType": "dropdown",
       "required": true,
-      "column": 1,
-      "icon": "FaTachometerAlt"
-    },
-    {
-      "label": "Engine Size",
-      "name": "engineSize",
-      "fieldType": "text",
-      "column": 1,
-      "icon": "FaWrench"
+      "options": [
+        "Black",
+        "Blue",
+        "Red",
+        "White",
+        "Green",
+        "Yellow",
+        "Grey",
+        "Orange"
+      ],
+      "column": 2,
+      "icon": "FaPalette"
     },
     {
       "label": "Cylinder",
@@ -175,21 +159,27 @@
       "icon": "FaCircle"
     },
     {
-      "label": "Color",
-      "name": "color",
+      "label": "Brake Type",
+      "name": "brakeType",
       "fieldType": "dropdown",
-      "required": true,
-      "options": ["Black", "Blue", "Gold", "Pink", "Red", "Silver", "White"],
-      "column": 2,
-      "icon": "FaPalette"
+      "options": ["Disc", "Drum", "ABS", "Combined Braking System (CBS)"],
+      "column": 1,
+      "icon": "FaBrake"
     },
     {
-      "label": "Door",
-      "name": "door",
-      "fieldType": "number",
-      "required": true,
+      "label": "Wheel Type",
+      "name": "wheelType",
+      "fieldType": "dropdown",
+      "options": ["Alloy", "Spoke", "Tubeless"],
       "column": 1,
-      "icon": "FaDoorClosed"
+      "icon": "FaDotCircle"
+    },
+    {
+      "label": "Chassis Type",
+      "name": "chassisType",
+      "fieldType": "text",
+      "column": 1,
+      "icon": "FaLayerGroup"
     },
     {
       "label": "VIN",

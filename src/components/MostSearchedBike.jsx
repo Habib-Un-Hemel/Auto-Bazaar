@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import CarItem from "./CarItem";
+import BikeItem from "./BikeItem";
 import { FormatResult } from "@/Shared/Service";
 import {
   Carousel,
@@ -8,33 +8,33 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { CarListing, CarImages } from "./../../configs/schema";
+import { BikeListing, BikeImages } from "../../configs/schema";
 import { eq, desc } from "drizzle-orm";
-import { db } from "./../../configs";
+import { db } from "../../configs";
 
-function MostSearchedCar() {
-  const [carList, setCarList] = useState([]);
+function MostSearchedBike() {
+  const [bikeList, setBikeList] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    GetPopularCarList();
+    GetPopularBikeList();
   }, []);
 
-  const GetPopularCarList = async () => {
+  const GetPopularBikeList = async () => {
     try {
       setLoading(true);
       const result = await db
         .select()
-        .from(CarListing)
-        .leftJoin(CarImages, eq(CarListing.id, CarImages.carListingId))
-        .orderBy(desc(CarListing.id))
+        .from(BikeListing)
+        .leftJoin(BikeImages, eq(BikeListing.id, BikeImages.bikeListingId))
+        .orderBy(desc(BikeListing.id))
         .limit(10);
 
       const formattedResults = FormatResult(result);
-      // console.log("Most Searched Cars:", formattedResults);
-      setCarList(formattedResults);
+      // console.log("Most Searched Bikes:", formattedResults);
+      setBikeList(formattedResults);
     } catch (error) {
-      console.error("Error fetching cars:", error);
+      console.error("Error fetching bikes:", error);
     } finally {
       setLoading(false);
     }
@@ -45,17 +45,16 @@ function MostSearchedCar() {
   }
 
   return (
-    // <div className="mx-24 mt-60">
-    <div className="mx-24 ">
+    <div className="mx-24">
       <h2 className="font-bold text-3xl text-center mt-16 mb-7">
-        Most Searched Cars
+        Most Searched Bikes
       </h2>
-      {carList.length > 0 ? (
+      {bikeList.length > 0 ? (
         <Carousel>
           <CarouselContent>
-            {carList.map((car, index) => (
+            {bikeList.map((bike, index) => (
               <CarouselItem key={index} className="basis-1/4">
-                <CarItem car={car} />
+                <BikeItem bike={bike} />
               </CarouselItem>
             ))}
           </CarouselContent>
@@ -63,10 +62,10 @@ function MostSearchedCar() {
           <CarouselNext />
         </Carousel>
       ) : (
-        <div className="text-center text-gray-500">No cars found</div>
+        <div className="text-center text-gray-500">No bikes found</div>
       )}
     </div>
   );
 }
 
-export default MostSearchedCar;
+export default MostSearchedBike;

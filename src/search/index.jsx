@@ -1,110 +1,20 @@
-// import { db } from "./../../configs";
-// import { CarImages, CarListing } from "./../../configs/schema";
-// import { useSearchParams } from "react-router-dom";
-// import { eq, and, gte, lte } from "drizzle-orm";
-// import { useState, useEffect } from "react";
-// import { FormatResult } from "@/Shared/Service";
-// import Header from "@/components/Header";
-// import Search from "@/components/Search";
-// import CarItem from "@/components/CarItem";
-
-// function SearchByOptions() {
-//   const [searchParams] = useSearchParams();
-//   const [carList, setCarList] = useState([]);
-//   // const [loading, setLoading] = useState(false);
-
-//   const condition = searchParams.get("cars");
-//   const make = searchParams.get("make");
-//   const priceRange = searchParams.get("price");
-
-//   console.log("Condition:", condition);
-//   console.log("Make:", make);
-//   console.log("Price Range:", priceRange);
-
-//   useEffect(() => {
-//     GetCarList();
-//   }, []);
-
-//   const GetCarList = async () => {
-//     const result = await db
-//       .select()
-//       .from(CarListing)
-//       .innerJoin(CarImages, eq(CarListing.id, CarImages.carListingId))
-//       .where(condition !== undefined && eq(CarListing.condition, condition))
-//       .where(make !== undefined && eq(CarListing.make, make));
-
-//     const resp = FormatResult(result);
-//     console.log("Result:", resp);
-//     setCarList(resp);
-//   };
-
-//   return (
-//     <div>
-//       <Header />
-//       <div className="p-10 bg-black flex justify-center">
-//         <Search />
-//       </div>
-//       <div>
-//         <h2 className="font-bold text-4xl p-10 md:px-20">Search Result</h2>
-
-//         {/* list of the car
-//         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 px-10 md:px-20">
-//           {carList.map((item, index) => (
-//             <div key={index}>
-//               <CarItem car={item}></CarItem>
-//             </div>
-//           ))}
-//         </div> */}
-
-//         {/* List of CarList */}
-//         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-10">
-//           {carList?.length > 0
-//             ? carList.map((item, index) => (
-//                 <div key={index}>
-//                   <CarItem car={item} />
-//                 </div>
-//               ))
-//             : [1, 2, 3, 4].map((item, index) => (
-//                 <div
-//                   key={index}
-//                   className="h-[370px] rounded-xl bg-slate-200 animate-pulse"
-//                 ></div>
-//               ))}
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default SearchByOptions;
-
-
-
-
-
-
-
-
-
-
-
 import { db } from "./../../configs";
-import { CarImages, CarListing } from "./../../configs/schema";
 import { useSearchParams } from "react-router-dom";
-import { eq, and, or, ilike, gte, lte } from "drizzle-orm";
+import { eq, and, gte, lte } from "drizzle-orm";
 import { useState, useEffect } from "react";
 import { FormatResult } from "@/Shared/Service";
 import Header from "@/components/Header";
 import Search from "@/components/Search";
-import CarItem from "@/components/CarItem";
+import BikeItem from "@/components/BikeItem"; // Renamed to match component name
+import { BikeListing, BikeImages } from "./../../configs/schema"; // Added missing import
 
 function SearchByOptions() {
   const [searchParams] = useSearchParams();
-  const [carList, setCarList] = useState([]);
+  const [bikeList, setBikeList] = useState([]); // Renamed for consistency
   const [loading, setLoading] = useState(false);
 
   // Get search parameters from URL
-  const condition = searchParams.get("cars");
+  const condition = searchParams.get("bikes"); // Changed from "cars" to "bikes"
   const make = searchParams.get("make");
   const priceRange = searchParams.get("price");
 
@@ -112,41 +22,43 @@ function SearchByOptions() {
 
   // Run search whenever URL parameters change
   useEffect(() => {
-    GetCarList();
-  }, [searchParams]); // Add searchParams as dependency
+    GetBikeList(); // Changed function name to match definition below
+  }, [searchParams]);
 
-  const GetCarList = async () => {
+  const GetBikeList = async () => {
     try {
       setLoading(true);
 
-      // Build query conditions
       let query = db
         .select()
-        .from(CarListing)
-        .leftJoin(CarImages, eq(CarListing.id, CarImages.carListingId));
+        .from(BikeListing)
+        .leftJoin(BikeImages, eq(BikeListing.id, BikeImages.bikeListingId));
 
-      // Add filters based on search params
       let whereConditions = [];
 
       if (condition) {
-        whereConditions.push(eq(CarListing.condition, condition));
+        whereConditions.push(eq(BikeListing.condition, condition));
       }
 
       if (make) {
-        whereConditions.push(eq(CarListing.make, make));
+        whereConditions.push(eq(BikeListing.make, make));
       }
 
       if (priceRange) {
-        // Parse price range (assuming format like "0-50000")
-        const [minPrice, maxPrice] = priceRange.split("-").map(Number);
+        if (priceRange.includes("-")) {
+          const [minPrice, maxPrice] = priceRange.split("-").map(Number);
 
-        if (!isNaN(minPrice) && !isNaN(maxPrice)) {
-          whereConditions.push(
-            and(
-              gte(CarListing.sellingPrice, minPrice.toString()),
-              lte(CarListing.sellingPrice, maxPrice.toString())
-            )
-          );
+          if (!isNaN(minPrice) && !isNaN(maxPrice)) {
+            whereConditions.push(
+              and(
+                gte(BikeListing.sellingPrice, minPrice.toString()),
+                lte(BikeListing.sellingPrice, maxPrice.toString())
+              )
+            );
+          }
+        } else if (priceRange === "1000000+") {
+          // Handle special case for "1000000+"
+          whereConditions.push(gte(BikeListing.sellingPrice, "1000000"));
         }
       }
 
@@ -158,15 +70,24 @@ function SearchByOptions() {
       const result = await query;
       const formattedResults = FormatResult(result);
 
-      console.log("Search results:", formattedResults);
-      setCarList(formattedResults);
+      setBikeList(formattedResults); // Changed to setBikeList
     } catch (error) {
       console.error("Error fetching search results:", error);
     } finally {
       setLoading(false);
     }
   };
-
+  useEffect(() => {
+    async function checkData() {
+      try {
+        const allBikes = await db.select().from(BikeListing).limit(10);
+        console.log("All bikes in DB:", allBikes);
+      } catch (err) {
+        console.error("DB check error:", err);
+      }
+    }
+    checkData();
+  }, []);
   return (
     <div>
       <Header />
@@ -191,15 +112,15 @@ function SearchByOptions() {
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-10">
-            {carList?.length > 0 ? (
-              carList.map((item, index) => (
+            {bikeList?.length > 0 ? (
+              bikeList.map((item, index) => (
                 <div key={item.id || index}>
-                  <CarItem car={item} />
+                  <BikeItem bike={item} /> {/* Changed car to bike */}
                 </div>
               ))
             ) : (
               <div className="col-span-full text-center text-gray-500 py-10">
-                No cars found matching your search criteria.
+                No bikes found matching your search criteria.
               </div>
             )}
           </div>

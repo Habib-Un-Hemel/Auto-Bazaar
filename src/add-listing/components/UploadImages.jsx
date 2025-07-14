@@ -1,179 +1,179 @@
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { db } from "../../../configs";
+import { BikeImages } from "../../../configs/schema";
 import { useEffect, useState } from "react";
-import PropTypes from "prop-types";
-import { IoMdCloseCircle } from "react-icons/io";
-import { storage } from "./../../../configs/firebaseConfig";
-import { db } from "./../../../configs";
-import { CarImages } from "./../../../configs/schema";
+import { Button } from "@/components/ui/button";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { eq } from "drizzle-orm";
+import { BiLoaderAlt } from "react-icons/bi";
+import { XCircle } from "lucide-react";
+import { toast } from "sonner";
 
-function UploadImages({ triggerUploadImages, setLoader, carInfo, mode }) {
-  const [selectedFileList, setSelectedFileList] = useState([]);
-  const [EditCarImageList, setEditCarImageList] = useState([]);
+function UploadImages({ triggerUploadImages, bikeInfo, mode, setLoader }) {
+  const [images, setImages] = useState([]);
+  const [existingImages, setExistingImages] = useState([]);
+  const [uploading, setUploading] = useState(false);
 
-  // useEffect(() => {
-  //   console.log("UploadImages component mounted with mode:", mode);
-  //   console.log("Car Info:", carInfo);
-  //   console.log("EditCarImageList before update:", EditCarImageList);
-  //   if (mode == "edit") {
-  //     carInfo?.images.forEach((image) => {
-  //       setEditCarImageList((prev) => [...prev, image?.imageUrl]);
-  //       console.log(image);
-  //     });
-  //   }
-  // }, [mode]);
-
-  // // Reset EditCarImageList when entering edit mode
+  // Fetch existing images when component loads in edit mode
   useEffect(() => {
-    console.log("Edit mode effect running with:", { mode, carInfo });
-
-    if (mode === "edit" && carInfo?.images) {
-      setEditCarImageList([]);
-      const imageUrls = carInfo.images
-        .filter((image) => image?.imageUrl)
-        .map((image) => image.imageUrl);
-      console.log("Setting image URLs:", imageUrls);
-      console.log(carInfo.images);
-
-      setEditCarImageList(imageUrls);
+    if (mode === "edit" && bikeInfo?.bikeImages) {
+      const imageUrls = bikeInfo.bikeImages.map((img) => img.imageUrl);
+      setExistingImages(imageUrls);
     }
-  }, [mode, carInfo]);
-
-  // // Monitor state changes
-  // useEffect(() => {
-  //   console.log("EditCarImageList changed:", EditCarImageList);
-  // }, [EditCarImageList]);
-
-  // ============
-
-  // useEffect(() => {
-  //   if (mode === "edit" && carInfo?.images?.length > 0) {
-  //     setEditCarImageList([]); // Reset the list before populating
-  //     const imageUrls = carInfo.images
-  //       .filter((image) => image?.imageUrl)
-  //       .map((image) => image.imageUrl);
-  //     setEditCarImageList(imageUrls);
-  //   }
-  // }, [carInfo]);
+  }, [mode, bikeInfo]);
 
   useEffect(() => {
     if (triggerUploadImages) {
-      handleUpload();
-      setSelectedFileList([]); // Clear the file list after upload
+      uploadImagesToStorage();
     }
   }, [triggerUploadImages]);
 
-  const onFileSelected = (event) => {
-    const files = event.target.files;
-    for (const file of files) {
-      setSelectedFileList((prev) => [...prev, file]);
-    }
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
+
+    // Preview selected images
+    const imagePromises = files.map((file) => {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target.result);
+        reader.readAsDataURL(file);
+      });
+    });
+
+    Promise.all(imagePromises).then((results) => {
+      setImages((prevImages) => [...prevImages, ...results]);
+    });
   };
 
-  const onImageRemove = (image) => {
-    const result = selectedFileList.filter((item) => item !== image);
-    setSelectedFileList(result);
+  const removeImage = (index) => {
+    setImages(images.filter((_, i) => i !== index));
   };
 
-  const onImageRemoveFromDB = async (image, index) => {
-    console.log("Removing image from DB:", image);
-    console.log(carInfo?.images[index]);
-    await db
-      .delete(CarImages)
-      .where(eq(CarImages.id, carInfo?.images[index]?.id))
-      .returning({ id: CarImages.id });
-
-    const imageList = EditCarImageList.filter((item) => item != image);
-    setEditCarImageList(imageList);
+  const removeExistingImage = (index) => {
+    setExistingImages(existingImages.filter((_, i) => i !== index));
+    // Note: This only removes from UI. You'd need additional logic to delete from storage/database
+    toast.info("Image marked for removal. Save to confirm changes.");
   };
 
-  //uploadImageonServer()
-  const handleUpload = async () => {
-    setLoader(true);
-    for (const file of selectedFileList) {
-      const fileName = Date.now() + ".jpeg";
-      const storageRef = ref(storage, "autoBazar/" + fileName);
-      const metaData = {
-        contentType: "image/jpeg",
-      };
-      try {
-        const snapShot = await uploadBytes(storageRef, file, metaData);
-        console.log("Uploaded a blob or file!", snapShot);
-        const downloadUrl = await getDownloadURL(storageRef);
-        console.log("File available at", downloadUrl);
-        await db.insert(CarImages).values({
-          imageUrl: downloadUrl,
-          carListingId: triggerUploadImages, // Assuming listingId is passed as a prop
-        });
-      } catch (error) {
-        console.error("Error uploading file:", error);
+  const uploadImagesToStorage = async () => {
+    setUploading(true);
+    try {
+      if (images.length === 0 && existingImages.length === 0) {
+        toast.error("Please select at least one image");
+        setUploading(false);
+        return;
       }
+
+      // If in edit mode, handle existing images first
+      if (mode === "edit") {
+        // Delete removed images from database (those not in existingImages)
+        const currentImages = bikeInfo.bikeImages.filter(
+          (img) => !existingImages.includes(img.imageUrl)
+        );
+
+        for (const img of currentImages) {
+          await db.delete(BikeImages).where(eq(BikeImages.id, img.id));
+        }
+      }
+
+      // Upload new images
+      for (let i = 0; i < images.length; i++) {
+        const base64Data = images[i];
+        const imageRef = ref(storage, `bike-images/${Date.now()}_${i}`);
+
+        // Convert base64 to blob
+        const response = await fetch(base64Data);
+        const blob = await response.blob();
+
+        // Upload to Firebase Storage
+        await uploadBytes(imageRef, blob);
+        const downloadURL = await getDownloadURL(imageRef);
+
+        // Insert URL into database
+        await db.insert(BikeImages).values({
+          bikeListingId: triggerUploadImages,
+          imageUrl: downloadURL,
+        });
+      }
+
+      toast.success("All images uploaded successfully!");
+      setLoader(false);
+    } catch (error) {
+      console.error("Error uploading images:", error);
+      toast.error("Error uploading images");
+      setUploading(false);
     }
-    setLoader(false);
   };
 
   return (
     <div>
-      <h2 className="font-medium text-xl my-3">Upload Images</h2>
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5 ">
-        {mode == "edit" &&
-          EditCarImageList.map((image, index) => (
-            <div key={index} className="relative">
-              <IoMdCloseCircle
-                className="absolute m-2 text-lg text-white cursor-pointer"
-                onClick={() => onImageRemoveFromDB(image, index)}
-              />
-              <img
-                src={image}
-                alt={`Selected file ${index + 1}`}
-                className="w-full h-[130px] object-cover rounded-xl"
-              />
-            </div>
-          ))}
-
-        {selectedFileList.map((image, index) => (
-          <div key={index} className="relative">
-            <IoMdCloseCircle
-              className="absolute m-2 text-lg text-white cursor-pointer"
-              onClick={() => onImageRemove(image, index)}
-            />
-            <img
-              src={URL.createObjectURL(image)}
-              alt={`Selected file ${index + 1}`}
-              className="w-full h-[130px] object-cover rounded-xl"
-            />
-          </div>
-        ))}
-        <div className="relative">
-          <label htmlFor="upload-images">
-            <div className="border rounded-xl border-dotted border-primary bg-blue-100 p-4 hover:shadow-md cursor-pointer">
-              <h2 className="text-lg text-center text-primary"> + </h2>
-            </div>
-          </label>
-          <input
-            type="file"
-            multiple={true}
-            id="upload-images"
-            onChange={onFileSelected}
-            className="opacity-0 absolute inset-0 w-full h-full cursor-pointer"
-          />
-        </div>
+      <h2 className="font-medium text-xl my-6">Upload Images</h2>
+      <div className="border-2 border-dashed border-gray-300 p-5 rounded-lg">
+        <input
+          type="file"
+          className="w-full"
+          multiple
+          onChange={handleImageChange}
+          accept="image/*"
+        />
       </div>
+
+      {/* Display existing images in edit mode */}
+      {existingImages.length > 0 && (
+        <div className="mt-5">
+          <h3 className="font-medium text-lg mb-3">Existing Images</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {existingImages.map((url, index) => (
+              <div key={index} className="relative">
+                <img
+                  src={url}
+                  alt={`Existing ${index}`}
+                  className="w-full h-40 object-cover rounded-md"
+                />
+                <button
+                  onClick={() => removeExistingImage(index)}
+                  className="absolute top-2 right-2 bg-white rounded-full p-1 shadow-md"
+                  type="button"
+                >
+                  <XCircle className="h-5 w-5 text-red-500" />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Display newly selected images */}
+      {images.length > 0 && (
+        <div className="mt-5">
+          <h3 className="font-medium text-lg mb-3">New Images</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {images.map((image, index) => (
+              <div key={index} className="relative">
+                <img
+                  src={image}
+                  alt={`Preview ${index}`}
+                  className="w-full h-40 object-cover rounded-md"
+                />
+                <button
+                  onClick={() => removeImage(index)}
+                  className="absolute top-2 right-2 bg-white rounded-full p-1 shadow-md"
+                  type="button"
+                >
+                  <XCircle className="h-5 w-5 text-red-500" />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {uploading && (
+        <div className="mt-4 flex justify-center">
+          <BiLoaderAlt className="animate-spin text-2xl" />
+        </div>
+      )}
     </div>
   );
 }
-UploadImages.propTypes = {
-  triggerUploadImages: PropTypes.bool.isRequired,
-  setLoader: PropTypes.func.isRequired,
-  carInfo: PropTypes.shape({
-    images: PropTypes.arrayOf(
-      PropTypes.shape({
-        imageUrl: PropTypes.string.isRequired,
-        id: PropTypes.number,
-      })
-    ),
-  }),
-  mode: PropTypes.string.isRequired,
-};
 
 export default UploadImages;

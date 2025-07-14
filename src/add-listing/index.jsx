@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
 import { useEffect, useState } from "react";
-import carDetails from "./../Shared/carDetails.json";
+// import carDetails from "./../Shared/carDetails.json";
 import InputField from "./components/InputField";
 import DropdownField from "./components/DropdownField";
 import { Separator } from "@/components/ui/separator";
@@ -8,7 +8,7 @@ import features from "./../Shared/features.json";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { db } from "./../../configs";
-import { CarImages, CarListing } from "./../../configs/schema";
+// import { CarImages, CarListing } from "./../../configs/schema";
 import TextAreaField from "./components/TextAreaField";
 import IconField from "./components/IconField";
 import UploadImages from "./components/UploadImages";
@@ -19,6 +19,8 @@ import { useUser } from "@clerk/clerk-react";
 import moment from "moment";
 import { eq } from "drizzle-orm";
 import { FormatResult } from "@/Shared/Service";
+import { BikeImages, BikeListing } from "./../../configs/schema";
+import bikeDetails from "./../Shared/bikeDetails.json"; // Updated filename
 
 // import { fa } from "@faker-js/faker/.";
 
@@ -48,9 +50,9 @@ function AddListing() {
   const GetListingDetail = async () => {
     const result = await db
       .select()
-      .from(CarListing)
-      .innerJoin(CarImages, eq(CarListing.id, CarImages.carListingId))
-      .where(eq(CarListing.id, recordId));
+      .from(BikeListing)
+      .innerJoin(BikeImages, eq(BikeListing.id, BikeImages.bikeListingId))
+      .where(eq(BikeListing.id, recordId));
     const resp = FormatResult(result);
     console.log("Listing Details:", resp);
     SetCarInfo(resp[0]);
@@ -85,7 +87,7 @@ function AddListing() {
 
     if (mode == "edit") {
       const result = await db
-        .update(CarListing)
+        .update(BikeListing)
         .set({
           ...formData,
           features: featuresData,
@@ -94,15 +96,16 @@ function AddListing() {
           userImageUrl: user?.imageUrl,
           postedOn: moment().format("DD/MM/YYYY"),
         })
-        .where(eq(CarListing.id, recordId))
-        .returning({ id: CarListing.id });
+        .where(eq(BikeListing.id, recordId))
+        .returning({ id: BikeListing.id });
       console.log("Data updated successfully:", result);
-      navigate("/profile");
+      setTriggerUploadImages(recordId);
+      navigate("/profile?refresh=true");
       setLoader(false);
     } else {
       try {
         const result = await db
-          .insert(CarListing)
+          .insert(BikeListing)
           .values({
             ...formData,
             features: featuresData,
@@ -111,7 +114,7 @@ function AddListing() {
             userImageUrl: user?.imageUrl,
             postedOn: moment().format("DD/MM/YYYY"),
           })
-          .returning({ id: CarListing.id });
+          .returning({ id: BikeListing.id });
         if (result) {
           console.log("Data inserted successfully:", result);
           setTriggerUploadImages(result[0]?.id);
@@ -123,6 +126,53 @@ function AddListing() {
       }
     }
   };
+
+  // const onSubmit = async (e) => {
+  //   setLoader(true);
+  //   e.preventDefault();
+  //   console.log("Form submitted with data:", formData);
+  //   toast("please wait....");
+
+  //   if (mode == "edit") {
+  //     const result = await db
+  //       .update(CarListing)
+  //       .set({
+  //         ...formData,
+  //         features: featuresData,
+  //         createdBy: user?.primaryEmailAddress?.emailAddress,
+  //         userName: user?.fullName,
+  //         userImageUrl: user?.imageUrl,
+  //         postedOn: moment().format("DD/MM/YYYY"),
+  //       })
+  //       .where(eq(CarListing.id, recordId))
+  //       .returning({ id: CarListing.id });
+  //     console.log("Data updated successfully:", result);
+  //     navigate("/profile");
+  //     setLoader(false);
+  //   } else {
+  //     try {
+  //       const result = await db
+  //         .insert(CarListing)
+  //         .values({
+  //           ...formData,
+  //           features: featuresData,
+  //           createdBy: user?.primaryEmailAddress?.emailAddress,
+  //           userName: user?.fullName,
+  //           userImageUrl: user?.imageUrl,
+  //           postedOn: moment().format("DD/MM/YYYY"),
+  //         })
+  //         .returning({ id: CarListing.id });
+  //       if (result) {
+  //         console.log("Data inserted successfully:", result);
+  //         setTriggerUploadImages(result[0]?.id);
+  //         console.log("triggerUploadImages set to:", result[0]?.id);
+  //         setLoader(false);
+  //       }
+  //     } catch (e) {
+  //       console.error("Error inserting data:", e);
+  //     }
+  //   }
+  // };
 
   // const handleSubmit = async (e) => {
   //   e.preventDefault();
@@ -139,9 +189,9 @@ function AddListing() {
         <h2 className="font-bold text-4xl">Add New Listing</h2>
         <form className="p-10 border rounded-xl mt-10" onSubmit={onSubmit}>
           <div>
-            <h2 className="font-medium text-xl mb-6">Car Details</h2>
+            <h2 className="font-medium text-xl mb-6">Bike Details</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              {carDetails.carDetails.map((item, index) => (
+              {bikeDetails.bikeDetails.map((item, index) => (
                 <div key={index}>
                   <label className="text-sm">
                     <IconField icon={item?.icon} />
@@ -152,19 +202,19 @@ function AddListing() {
                     <InputField
                       item={item}
                       handleInputChange={handleInputChange}
-                      carInfo={carInfo}
+                      carInfo={formData}
                     />
                   ) : item.fieldType === "dropdown" ? (
                     <DropdownField
                       item={item}
                       handleInputChange={handleInputChange}
-                      carInfo={carInfo}
+                      carInfo={formData}
                     />
                   ) : item.fieldType === "textarea" ? (
                     <TextAreaField
                       item={item}
                       handleInputChange={handleInputChange}
-                      carInfo={carInfo}
+                      carInfo={formData}
                       className="w-full"
                     />
                   ) : null}
@@ -197,8 +247,8 @@ function AddListing() {
           <Separator className="my-6" />
           <UploadImages
             triggerUploadImages={triggerUploadImages}
-            carInfo={carInfo}
-            mode = {mode}
+            bikeInfo={carInfo} // Updated name but keep the variable for now
+            mode={mode}
             setLoader={(v) => {
               setLoader(v);
               navigate("/profile");

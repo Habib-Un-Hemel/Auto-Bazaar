@@ -3,7 +3,7 @@ import { Button } from "./components/ui/button";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
 import Category from "./components/Category";
-import MostSearchedCar from "./components/MostSearchedCar";
+import MostSearchedBike from "./components/MostSearchedBike";
 import Info from "./components/Info";
 import Footer from "./components/Footer";
 function Home() {
@@ -12,11 +12,11 @@ function Home() {
       <Header></Header>
       <Hero></Hero>
       <Category></Category>
-      <MostSearchedCar></MostSearchedCar>
+      <MostSearchedBike></MostSearchedBike>
       <Info></Info>
 
       <Footer></Footer>
-{/* 
+      {/* 
       <SignInButton mode="modal" forceRedirectUrl="/">
         <Button>Sign In</Button>
       </SignInButton> */}

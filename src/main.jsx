@@ -7,6 +7,7 @@ import { createBrowserRouter, RouterProvider } from "react-router";
 import { ClerkProvider } from "@clerk/clerk-react";
 import Profile from "./profile";
 import AddListing from "./add-listing";
+import BikePricePrediction from "./price-prediction/OldBikePricePrediction";
 
 import { Toaster } from "@/components/ui/sonner";
 import SearchByCategory from "./search/[category]";
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
   {
     path: "/listing-details/:id",
     element: <ListingDetails />,
+  },
+  {
+    path: "/price-prediction",
+    element: <BikePricePrediction />,
   },
 ]);
 

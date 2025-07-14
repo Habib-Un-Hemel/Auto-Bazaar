@@ -1,19 +1,29 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 
-function Calculator({ carDetail }) {
-  // Initialize with car price from props if available
-  const [carPrice, setCarPrice] = useState(carDetail?.sellingPrice || 0);
+function Calculator({ bikeDetail }) {
+  // Initialize state variables
+  const [bikePrice, setBikePrice] = useState(0);
   const [interestRate, setInterestRate] = useState(5); // Default 5%
   const [loanTerm, setLoanTerm] = useState(60); // Default 60 months
   const [downPayment, setDownPayment] = useState(0);
   const [monthlyPayment, setMonthlyPayment] = useState(0);
 
+  // Update bike price when bikeDetail changes
+  useEffect(() => {
+    if (bikeDetail && bikeDetail.sellingPrice) {
+      // Convert to number and set the state
+      setBikePrice(Number(bikeDetail.sellingPrice));
+      console.log("Setting bike price to:", Number(bikeDetail.sellingPrice));
+    }
+  }, [bikeDetail]);
+
   const calculateMonthlyPayment = () => {
     try {
       // Convert all inputs to numbers
-      const principal = Number(carPrice) - Number(downPayment);
+      const principal = Number(bikePrice) - Number(downPayment);
       const monthlyInterestRate = Number(interestRate) / 1200; // Convert annual rate to monthly decimal
       const termMonths = Number(loanTerm);
 
@@ -64,8 +74,8 @@ function Calculator({ carDetail }) {
           <label className="block mb-2">Price $</label>
           <Input
             type="number"
-            value={carPrice}
-            onChange={(e) => setCarPrice(e.target.value)}
+            value={bikePrice}
+            onChange={(e) => setBikePrice(Number(e.target.value))}
           />
         </div>
         <div className="w-full">
@@ -112,5 +122,11 @@ function Calculator({ carDetail }) {
     </div>
   );
 }
+
+Calculator.propTypes = {
+  bikeDetail: PropTypes.shape({
+    sellingPrice: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  }),
+};
 
 export default Calculator;
