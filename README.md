@@ -140,7 +140,7 @@ npm run dev
 
 ## 🎥 Project Walkthrough
 
-[Click here to watch the walkthrough](#) <!-- Replace # with your YouTube or Loom link -->
+[Click here to watch the walkthrough](https://www.youtube.com/watch?v=HLen6e6CIoM&ab_channel=HabibunNabiHemel) <!-- Replace # with your YouTube or Loom link -->
 
 ## 🙌 Acknowledgements
 
