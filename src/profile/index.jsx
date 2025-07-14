@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router";
 import MyListing from "./components/MyListing";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Inbox from "./components/inbox";
+import Inbox from "./components/Inbox.jsx";
 
 function Profile() {
   return (
@@ -17,10 +17,12 @@ function Profile() {
             <TabsTrigger value="inbox">Inbox</TabsTrigger>
             <TabsTrigger value="profile">Profile</TabsTrigger>
           </TabsList>
-          <TabsContent value="my-listing" >
+          <TabsContent value="my-listing">
             <MyListing></MyListing>
           </TabsContent>
-          <TabsContent value="inbox"><Inbox></Inbox></TabsContent>
+          <TabsContent value="inbox">
+            <Inbox></Inbox>
+          </TabsContent>
           <TabsContent value="profile">Profile Tab</TabsContent>
         </Tabs>
       </div>
