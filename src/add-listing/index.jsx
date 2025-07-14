@@ -185,7 +185,7 @@ function AddListing() {
   return (
     <div>
       <Header />
-      <div className="px-10 md:px-20 my-10">
+      <div className="px-10 md:px-20 my-10 mt-20">
         <h2 className="font-bold text-4xl">Add New Listing</h2>
         <form className="p-10 border rounded-xl mt-10" onSubmit={onSubmit}>
           <div>

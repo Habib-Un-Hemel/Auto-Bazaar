@@ -10,7 +10,7 @@ function Profile() {
   return (
     <div>
       <Header></Header>
-      <div className="px-10 md:px-20 my-10">
+      <div className="px-10 md:px-20 my-10 mt-20">
         <Tabs defaultValue="my-listing" className="w-full">
           <TabsList className="w-full flex justify-start">
             <TabsTrigger value="my-listing">My Listing</TabsTrigger>

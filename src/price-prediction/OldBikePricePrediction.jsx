@@ -253,7 +253,7 @@ function BikePricePrediction() {
   return (
     <>
       <Header />
-      <div className="container mx-auto p-6">
+      <div className="container mx-auto p-6 mt-20">
         <h1 className="text-3xl font-bold mb-8 flex items-center">
           <FaChartLine className="mr-2 text-primary" /> Bike Price Prediction
         </h1>

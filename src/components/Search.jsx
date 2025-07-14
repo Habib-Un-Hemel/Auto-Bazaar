@@ -26,7 +26,7 @@ function Search({ initialCondition, initialMake, initialPrice }) {
   }, [initialCondition, initialMake, initialPrice]);
 
   return (
-    <div className="p-4 bg-white rounded-xl md:rounded-2xl shadow-lg flex flex-col md:flex-row items-center justify-between gap-4 w-full max-w-5xl mx-auto border border-gray-100">
+    <div className="p-4 mt-20  bg-white rounded-xl md:rounded-2xl shadow-lg flex flex-col md:flex-row items-center justify-between gap-4 w-full max-w-5xl mx-auto border border-gray-100">
       <div className="w-full md:w-1/3">
         <label className="text-xs text-gray-500 mb-1 block font-medium ml-1">Condition</label>
         <Select value={bikes} onValueChange={(value) => setBikes(value)}>
@@ -42,10 +42,10 @@ function Search({ initialCondition, initialMake, initialPrice }) {
       </div>
 
       <div className="w-full md:w-1/3">
-        <label className="text-xs text-gray-500 mb-1 block font-medium ml-1">Make</label>
+        <label className="text-xs text-gray-500 mb-1 block font-medium ml-1">Brands</label>
         <Select value={make} onValueChange={(value) => setMake(value)}>
           <SelectTrigger className="w-full bg-gray-50 border-gray-200 rounded-lg hover:border-primary focus:border-primary focus:ring-1 focus:ring-primary">
-            <SelectValue placeholder="Select make" />
+            <SelectValue placeholder="Select Brand" />
           </SelectTrigger>
           <SelectContent className="bg-white max-h-[300px] overflow-y-auto">
             {Data.BikeMakes.map((maker, index) => (
