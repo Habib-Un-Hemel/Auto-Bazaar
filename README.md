@@ -1,4 +1,5 @@
 # AutoBazaar 🏍️
+is live on https://auto-bazaar-three.vercel.app/
 
 AutoBazaar is a smart motorcycle marketplace built with the MERN stack and PostgreSQL, offering users a seamless platform to buy, sell, or rent bikes. It includes AI-powered features for price prediction and guidance, real-time availability, and intuitive brand/category-based filtering.
 
