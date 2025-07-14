@@ -1,8 +1,8 @@
 import { db } from "../../../configs";
 import { BikeImages } from "../../../configs/schema";
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { storage } from "../../../configs/firebaseConfig";
 import { eq } from "drizzle-orm";
 import { BiLoaderAlt } from "react-icons/bi";
 import { XCircle } from "lucide-react";
