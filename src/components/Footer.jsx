@@ -247,7 +247,7 @@ function Footer() {
           <ul className="mt-4 flex justify-center gap-6 sm:mt-0 sm:justify-start">
             <li>
               <a
-                href="#"
+                href="https://github.com/Habib-Un-Hemel"
                 rel="noreferrer"
                 target="_blank"
                 className="text-primary transition hover:text-primary/75"
@@ -270,7 +270,7 @@ function Footer() {
 
             <li>
               <a
-                href="#"
+                href="https://github.com/Habib-Un-Hemel"
                 rel="noreferrer"
                 target="_blank"
                 className="text-primary transition hover:text-primary/75"
@@ -293,7 +293,7 @@ function Footer() {
 
             <li>
               <a
-                href="#"
+                href="https://x.com/Habib33hemel"
                 rel="noreferrer"
                 target="_blank"
                 className="text-primary transition hover:text-primary/75"
@@ -312,7 +312,7 @@ function Footer() {
 
             <li>
               <a
-                href="#"
+                href="https://github.com/Habib-Un-Hemel"
                 rel="noreferrer"
                 target="_blank"
                 className="text-primary transition hover:text-primary/75"
@@ -335,7 +335,7 @@ function Footer() {
 
             <li>
               <a
-                href="#"
+                href="https://github.com/Habib-Un-Hemel"
                 rel="noreferrer"
                 target="_blank"
                 className="text-primary transition hover:text-primary/75"

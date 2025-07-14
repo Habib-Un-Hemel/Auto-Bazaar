@@ -68,7 +68,7 @@ function Calculator({ bikeDetail }) {
 
   return (
     <div className="p-10 border rounded-xl shadow-md mt-7">
-      <h2 className="font-medium text-2xl">Financial Calculator</h2>
+      <h2 className="font-medium text-2xl">EMI Calculator</h2>
       <div className="flex gap-5 mt-5">
         <div className="w-full">
           <label className="block mb-2">Price $</label>
@@ -89,7 +89,7 @@ function Calculator({ bikeDetail }) {
       </div>
       <div className="flex gap-5 mt-5">
         <div className="w-full">
-          <label className="block mb-2">Loan Term (months)</label>
+          <label className="block mb-2">Duration (months)</label>
           <Input
             type="number"
             value={loanTerm}

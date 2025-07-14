@@ -41,7 +41,7 @@ function ListingDetail() {
       <Header></Header>
 
       {/* header Detail Component */}
-      <div className="p-10 md:px-20">
+      <div className="p-10 md:px-20 mt-10">
         <DetailHeader bikeDetail={bikeDetail} /> {/* Changed prop name */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mt-10">
           {/* left */}

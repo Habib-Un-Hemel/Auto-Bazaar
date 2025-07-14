@@ -13,8 +13,8 @@ function Category() {
   }
 
   return (
-    <div className="mx-8 md:mx-24 mb-25 pt-9 ">
-      <h2 className="font-bold text-3xl text-center mt-20 mb-7">
+    <div className="mx-8 md:mx-24 ">
+      <h2 className="font-bold text-3xl text-center  mb-7">
         Browse By Category
       </h2>
 
